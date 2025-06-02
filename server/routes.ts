@@ -3,15 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { insertProductSchema, insertCategorySchema, insertOrderSchema, insertCartItemSchema, insertWishlistSchema, insertReviewSchema } from "@shared/schema";
-import Stripe from "stripe";
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
-}
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-06-20",
-});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
@@ -345,28 +337,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Stripe payment routes
-  app.post("/api/create-payment-intent", isAuthenticated, async (req, res) => {
+  // UPI payment routes
+  app.post("/api/create-payment", isAuthenticated, async (req: any, res) => {
     try {
-      const { amount } = req.body;
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(amount * 100), // Convert to cents
-        currency: "inr", // Indian Rupees
-        metadata: {
-          userId: req.user?.claims?.sub,
+      const { amount, paymentMethod } = req.body;
+      const userId = req.user.claims.sub;
+      
+      // Generate a unique payment ID
+      const paymentId = `PAY_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Create payment record for UPI/Bank transfer
+      const paymentData = {
+        paymentId,
+        amount,
+        paymentMethod: paymentMethod || 'upi',
+        merchantDetails: {
+          upiId: "premiumsarees@paytm", // Your business UPI ID
+          accountNumber: "****1234", // Masked account number
+          ifscCode: "PAYTM0123456",
+          businessName: "Premium Sarees"
         },
-      });
-      res.json({ clientSecret: paymentIntent.client_secret });
+        status: "pending",
+        createdAt: new Date().toISOString(),
+        instructions: paymentMethod === 'bank' ? 
+          "Please transfer the amount to the provided bank account and upload the payment proof." :
+          "Please pay using any UPI app and enter the transaction ID."
+      };
+      
+      res.json(paymentData);
     } catch (error: any) {
-      console.error("Error creating payment intent:", error);
-      res.status(500).json({ message: "Error creating payment intent: " + error.message });
+      console.error("Error creating payment:", error);
+      res.status(500).json({ message: "Error creating payment: " + error.message });
     }
   });
 
   // Admin routes
   app.get('/api/admin/stats', isAuthenticated, async (req: any, res) => {
     try {
-      const user = await storage.getUser(req.user.claims.sub);
+      const user = await storage.getUser(req.user?.claims?.sub);
       if (!user?.isAdmin) {
         return res.status(403).json({ message: "Admin access required" });
       }

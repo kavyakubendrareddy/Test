@@ -10,7 +10,7 @@ import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductDetail from "@/pages/product-detail";
 import Cart from "@/pages/cart";
-import Checkout from "@/pages/checkout";
+import UpiCheckout from "@/pages/upi-checkout";
 import Profile from "@/pages/profile";
 import Admin from "@/pages/admin";
 
@@ -27,7 +27,7 @@ function Router() {
           <Route path="/products" component={Products} />
           <Route path="/products/:id" component={ProductDetail} />
           <Route path="/cart" component={Cart} />
-          <Route path="/checkout" component={Checkout} />
+          <Route path="/checkout" component={UpiCheckout} />
           <Route path="/profile" component={Profile} />
           <Route path="/admin" component={Admin} />
         </>
