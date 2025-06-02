@@ -49,9 +49,8 @@ export default function Header() {
           <Link href="/">
             <div className="flex items-center cursor-pointer">
               <h1 className="text-2xl font-playfair font-bold text-burgundy">
-                <span className="text-gold">स</span>Sarangam
+                Banna
               </h1>
-              <span className="ml-2 text-sm text-gray-600 font-devanagari">सारंगम्</span>
             </div>
           </Link>
 

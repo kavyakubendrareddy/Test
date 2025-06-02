@@ -155,7 +155,7 @@ export default function Home() {
                 Featured Collection
               </h2>
               <p className="text-gray-600">
-                Handpicked premium sarees showcasing the finest craftsmanship
+                Handpicked sarees showcasing the finest craftsmanship
               </p>
             </div>
             <Link href="/products">

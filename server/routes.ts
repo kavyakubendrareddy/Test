@@ -352,10 +352,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         amount,
         paymentMethod: paymentMethod || 'upi',
         merchantDetails: {
-          upiId: "premiumsarees@paytm", // Your business UPI ID
+          upiId: "banna@paytm", // Your business UPI ID
           accountNumber: "****1234", // Masked account number
           ifscCode: "PAYTM0123456",
-          businessName: "Premium Sarees"
+          businessName: "Banna"
         },
         status: "pending",
         createdAt: new Date().toISOString(),

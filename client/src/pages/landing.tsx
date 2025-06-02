@@ -235,7 +235,7 @@ export default function Landing() {
               Featured Collection
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Handpicked premium sarees showcasing the finest craftsmanship
+              Handpicked sarees showcasing the finest craftsmanship
             </p>
           </div>
 
