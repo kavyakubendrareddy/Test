@@ -53,9 +53,10 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  const port = 5000;
-  server.listen(5000, "127.0.0.1", () => {
-    log("✅ Server running at http://127.0.0.1:5000");
+  // Use dynamic port and proper binding for Render
+  const port = process.env.PORT || 5000;
+  server.listen(port, "0.0.0.0", () => {
+    log(`✅ Server running at http://0.0.0.0:${port}`);
   });
 
 })();
